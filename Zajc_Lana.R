@@ -2,6 +2,7 @@ library(rvest)
 library(gsubfn)
 library(readr)
 library(dplyr)
+library(ggplot2)
 
 hist2015 = read.csv("hist2015.csv", row.names = 1)
 hist2016 = read.csv("hist2016.csv", row.names = 1)
@@ -36,4 +37,36 @@ lines(datumi[, c(3)], x =dospetja, col="blue", type="o", text(11, -0.3, "01.12.2
 # OPIS krivulj: Opazimo, da z dospetjem narašča tudi obrestna mera. Obrestne krivulje spominjajo na linearno funkcijo. 
 
 # 3 del - Hipoteza pričakovanj trga
+
+terminske <- data.frame()
+# T = 6, U = 12
+
+for (i in 1: nrow(skupna)){
+L012 <- skupna[i, "12m"]
+L06 <- skupna[i, "6m"]
+Ter0612 = ( 1 / (12-6) ) *((1 + 12 * L012)/(1 + 6* L06) - 1)
+
+terminske[i, 1] <- Ter0612 }
+
+terminske <- cbind(terminske, skupna[, c(6,8)])
+terminske <- terminske[, c(2,3,1)]
+colnames(terminske) <- c("Euribor6m", "Euribor12m", "Napoved6m")
+rownames(terminske) <- rownames(skupna)
+
+# 3C:
+
+#dodamo v tabelo terminske še stolpec z letnico: 
+stolpecLeto <- as.vector(cbind(seq(2015, 2015, length.out = 12), (seq(2016, 2016, length.out = 12)), seq(2017, 2017, length.out = 12))) %>% as.factor()
+terminske <- as.data.frame(cbind(terminske, stolpecLeto))
+names(terminske)[4] <- "Leto"
+
+graf3 <- ggplot(terminske, aes(x = terminske$Napoved6m, y = terminske$Napoved6m)) + 
+        geom_point(aes(color = terminske$Leto), size = 5) + 
+        geom_smooth(method='lm', color = "red") + 
+        geom_abline(slope = 1, intercept = 0)+ 
+        labs(title = "6m Euribor 2015-2017", x = "Napoved", y = "Opazovano", color = "Leto" )
+
+        
+        
+
 
