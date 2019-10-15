@@ -60,13 +60,49 @@ stolpecLeto <- as.vector(cbind(seq(2015, 2015, length.out = 12), (seq(2016, 2016
 terminske <- as.data.frame(cbind(terminske, stolpecLeto))
 names(terminske)[4] <- "Leto"
 
-graf3 <- ggplot(terminske, aes(x = terminske$Napoved6m, y = terminske$Napoved6m)) + 
+graf3 <- ggplot(terminske, aes(x = terminske$Napoved6m, y = terminske$Euribor6m)) + 
         geom_point(aes(color = terminske$Leto), size = 5) + 
-        geom_smooth(method='lm', color = "red") + 
+        geom_smooth(method='lm',se = FALSE, color = "gray") + 
         geom_abline(slope = 1, intercept = 0)+ 
+        coord_cartesian(xlim=c(-1.0,1.5),ylim=c(-1.0,1.5)) + 
         labs(title = "6m Euribor 2015-2017", x = "Napoved", y = "Opazovano", color = "Leto" )
+print(graf3)
 
-        
-        
+#Grafi po letih 3d:
 
+#2015
+
+terminske2015 <- terminske[c(1:12),]
+
+graf2015 <- ggplot(terminske2015, aes(x = terminske2015$Napoved6m, y = terminske2015$Euribor6m)) + 
+        geom_point(color = "red", size = 5) + 
+        geom_smooth(method='lm',se = FALSE, color = "gray") + 
+        geom_abline(slope = 1, intercept = 0)+ 
+        coord_cartesian(xlim=c(-0.1,0.3),ylim=c(-0.1,0.3)) + 
+        labs(title = "6m Euribor 2015", x = "Napoved", y = "Opazovano", color = "Leto" )
+print(graf2015)
+
+#2016
+
+terminske2016 <- terminske[c(13:24),]
+
+graf2016 <- ggplot(terminske2016, aes(x = terminske2016$Napoved6m, y = terminske2016$Euribor6m)) + 
+        geom_point(color = "green", size = 5) + 
+        geom_smooth(method='lm',se = FALSE, color = "gray") + 
+        geom_abline(slope = 1, intercept = 0)+ 
+        coord_cartesian(xlim=c(-1.0,1.5),ylim=c(-1.0,1.5)) + 
+        labs(title = "6m Euribor 2016", x = "Napoved", y = "Opazovano", color = "Leto" )
+print(graf2016)
+
+#2017
+
+terminske2017 <- terminske[c(25:36),]
+
+graf2017 <- ggplot(terminske2017, aes(x = terminske2017$Napoved6m, y = terminske2017$Euribor6m)) + 
+        geom_point(color = "blue", size = 5) + 
+        geom_smooth(method='lm',se = FALSE, color = "gray") + 
+        geom_abline(slope = 1, intercept = 0)+ 
+        coord_cartesian(xlim=c(-0.5,0.25),ylim=c(-0.5,0.25)) + 
+        labs(title = "6m Euribor 2017", x = "Napoved", y = "Opazovano", color = "Leto" )
+print(graf2017)
 
