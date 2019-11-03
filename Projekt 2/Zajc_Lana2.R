@@ -49,7 +49,55 @@ curve(ppareto1(x, shape, min), add = TRUE)
 
 # 2c 
 
-lala <- aggregateDist("recursive", model.freq = "binom", model.sev = dis, prob = 1/2, size = 20, maxit = 1000, x.scale = h, tol = 0.1)
+porazdelitvenaS <- aggregateDist("recursive", model.freq = "binom", model.sev = dis, prob = 1/2, size = 20, maxit = 1000, x.scale = h, tol = 0.1)
 
-Es <- mean(lala)
+# 2d
+
+Es <- mean(porazdelitvenaS)
+
+graf5 <- plot(porazdelitvenaS)
+
+vrednosti <- knots(porazdelitvenaS)
+verjetnosti <- diff(porazdelitvenaS)
+
+upanje_s <- sum(vrednosti * verjetnosti)
+upanje_skvadrat <- sum(vrednosti^2 * verjetnosti)
+
+disperzija_varianca <- upanje_skvadrat - upanje_s^2
+
+# 3 naloga
+
+# 3a
+
+ponovitve <- 10000
+n <- 20
+p <- 1/2
+
+simulacija_S <- c()
+simulacija_N <- rbinom(ponovitve, n, p)
+
+for (i in simulacija_N) {
+  simulacija_S <- c(simulacija_S, sum(rpareto1(i, shape, min)))
+}
+
+# 3b
+
+upanje_simS <- mean(simulacija_S)
+var_simS <- var(simulacija_S)
+
+#stevilke se ne ujemajo?
+
+# 3c graf
+plot(porazdelitvenaS)
+gr <- plot(ecdf(simulacija_S), add = TRUE, col = "red", lwd = 2)
+      legend(40, 0.4, legend = c("Panjerjev algoritem", "Monte Carlo simulacija"), col =c("black", "red"), bty = "n", lwd = 2)
+
+
+
+
+
+
+
+
+
 
